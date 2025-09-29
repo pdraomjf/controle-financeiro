@@ -41,9 +41,13 @@ public class UsuarioController {
     public ResponseEntity<String> atualizarUsuario(@RequestBody UsuarioPostPutDTO request, @PathVariable UUID id) {
         Optional<Usuario> buscaUsuario = usuarioRepository.findById(id);
 
-        buscaUsuario.get().setNome(request.getNome());
-        buscaUsuario.get().setEmail(request.getEmail());
-        buscaUsuario.get().setSenha(bCryptPasswordEncoder.encode(request.getSenha()));
+        if (buscaUsuario.isPresent()) {
+            buscaUsuario.get().setNome(request.getNome());
+            buscaUsuario.get().setEmail(request.getEmail());
+            buscaUsuario.get().setSenha(bCryptPasswordEncoder.encode(request.getSenha()));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+        }
 
         usuarioRepository.save(buscaUsuario.get());
 
@@ -94,6 +98,6 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso.");
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário deletado com sucesso.");
     }
 }

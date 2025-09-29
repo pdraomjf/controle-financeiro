@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -24,5 +25,9 @@ public class Conta {
 
     @Column(precision = 15, scale = 2, nullable = false)
     private BigDecimal saldo;
+
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Movimentacao> movimentacao;
+
 }
 

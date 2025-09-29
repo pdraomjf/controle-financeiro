@@ -61,7 +61,8 @@ public class ContaController {
         List<ContaGetDTO> contas = new ArrayList<>();
 
         if (busca.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            List<ContaGetDTO> vazio = new ArrayList<>();
+            return ResponseEntity.status(HttpStatus.OK).body(vazio);
         } else {
             for (Conta conta : busca) {
                 ContaGetDTO contaGetDTO = new ContaGetDTO();
