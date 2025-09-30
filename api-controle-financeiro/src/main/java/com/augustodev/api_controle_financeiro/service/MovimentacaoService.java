@@ -3,20 +3,19 @@ package com.augustodev.api_controle_financeiro.service;
 import com.augustodev.api_controle_financeiro.dto.movimentacao.MovimentacaoGetDTO;
 import com.augustodev.api_controle_financeiro.dto.movimentacao.MovimentacaoPostDTO;
 import com.augustodev.api_controle_financeiro.dto.movimentacao.MovimentacaoSalvaDTO;
+import com.augustodev.api_controle_financeiro.exception.ContaNaoEncontradaException;
+import com.augustodev.api_controle_financeiro.exception.SaldoInsuficienteException;
 import com.augustodev.api_controle_financeiro.models.Conta;
 import com.augustodev.api_controle_financeiro.models.Movimentacao;
 import com.augustodev.api_controle_financeiro.models.TipoMovimentacao;
 import com.augustodev.api_controle_financeiro.repository.ContaRepository;
 import com.augustodev.api_controle_financeiro.repository.MovimentacaoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,7 +34,7 @@ public class MovimentacaoService {
         movimentacao.setTipo(dados.getTipo());
 
         Conta conta = contaRepository.findById(dados.getConta_id())
-                .orElseThrow(() -> new RuntimeException("Não foi possível encontrar a conta"));
+                .orElseThrow(() -> new ContaNaoEncontradaException("Não foi possível encontrar a conta com id: " + dados.getConta_id()));
 
         if (dados.getTipo().equals(TipoMovimentacao.ENTRADA)) {
             BigDecimal saldoAtual = conta.getSaldo();
@@ -53,7 +52,7 @@ public class MovimentacaoService {
             if (saldoAtual.compareTo(valorRetirado) >= 0) {
                 valorAtualizado = saldoAtual.subtract(valorRetirado);
             } else {
-                throw new RuntimeException("Não é possível retirar um valor maior do que você possuí.");
+                throw new SaldoInsuficienteException("Não é possível retirar um valor maior do que você possuí.");
             }
 
             conta.setSaldo(valorAtualizado);
@@ -68,7 +67,7 @@ public class MovimentacaoService {
 
     public List<MovimentacaoGetDTO> buscarTodas(UUID id) {
         Conta buscarConta = contaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Não foi possível encontrar a conta."));
+                .orElseThrow(() -> new ContaNaoEncontradaException("Não foi possível encontrar a conta com id: " + id));
         List<Movimentacao> buscaMovimentacoes = buscarConta.getMovimentacao();
         List<MovimentacaoGetDTO> movimentacoes = new ArrayList<>();
 

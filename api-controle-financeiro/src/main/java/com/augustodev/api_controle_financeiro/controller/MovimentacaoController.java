@@ -3,21 +3,13 @@ package com.augustodev.api_controle_financeiro.controller;
 import com.augustodev.api_controle_financeiro.dto.movimentacao.MovimentacaoGetDTO;
 import com.augustodev.api_controle_financeiro.dto.movimentacao.MovimentacaoPostDTO;
 import com.augustodev.api_controle_financeiro.dto.movimentacao.MovimentacaoSalvaDTO;
-import com.augustodev.api_controle_financeiro.models.Conta;
-import com.augustodev.api_controle_financeiro.models.Movimentacao;
-import com.augustodev.api_controle_financeiro.models.TipoMovimentacao;
-import com.augustodev.api_controle_financeiro.repository.ContaRepository;
-import com.augustodev.api_controle_financeiro.repository.MovimentacaoRepository;
 import com.augustodev.api_controle_financeiro.service.MovimentacaoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController

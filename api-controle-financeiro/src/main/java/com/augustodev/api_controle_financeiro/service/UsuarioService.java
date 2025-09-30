@@ -3,6 +3,7 @@ package com.augustodev.api_controle_financeiro.service;
 import com.augustodev.api_controle_financeiro.dto.usuario.UsuarioGetDTO;
 import com.augustodev.api_controle_financeiro.dto.usuario.UsuarioPostPutDTO;
 import com.augustodev.api_controle_financeiro.dto.usuario.UsuarioRespostaDTO;
+import com.augustodev.api_controle_financeiro.exception.UsuarioNaoEncontradoException;
 import com.augustodev.api_controle_financeiro.models.TipoUsuario;
 import com.augustodev.api_controle_financeiro.models.Usuario;
 import com.augustodev.api_controle_financeiro.repository.UsuarioRepository;
@@ -36,7 +37,7 @@ public class UsuarioService {
 
     public UsuarioRespostaDTO atualizar(UsuarioPostPutDTO dados, UUID id) {
         Usuario busca = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Não foi possível encontrar o usuário."));
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Não foi possível encontrar o usuário com id: " + id));
 
         busca.setNome(dados.getNome());
         busca.setEmail(dados.getEmail());
@@ -68,7 +69,7 @@ public class UsuarioService {
 
     public UsuarioGetDTO buscarPorId(UUID id) {
         Usuario busca = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Não foi possível encontrar o usuário."));
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Não foi possível encontrar o usuário com id: " + id));
         UsuarioGetDTO usuario = new UsuarioGetDTO();
 
         usuario.setId(busca.getId());
@@ -81,7 +82,7 @@ public class UsuarioService {
 
     public void deletar(UUID id) {
         Usuario busca = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Não foi possível encontrar o usuário."));
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Não foi possível encontrar o usuário com id: " + id));
 
         usuarioRepository.delete(busca);
     }

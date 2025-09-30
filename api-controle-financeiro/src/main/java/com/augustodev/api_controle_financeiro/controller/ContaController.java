@@ -3,19 +3,13 @@ package com.augustodev.api_controle_financeiro.controller;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaCriadaDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaPostDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaGetDTO;
-import com.augustodev.api_controle_financeiro.models.Conta;
-import com.augustodev.api_controle_financeiro.models.Usuario;
-import com.augustodev.api_controle_financeiro.repository.ContaRepository;
-import com.augustodev.api_controle_financeiro.repository.UsuarioRepository;
 import com.augustodev.api_controle_financeiro.service.ContaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController

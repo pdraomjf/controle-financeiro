@@ -3,13 +3,13 @@ package com.augustodev.api_controle_financeiro.service;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaCriadaDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaGetDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaPostDTO;
+import com.augustodev.api_controle_financeiro.exception.ContaNaoEncontradaException;
+import com.augustodev.api_controle_financeiro.exception.UsuarioNaoEncontradoException;
 import com.augustodev.api_controle_financeiro.models.Conta;
 import com.augustodev.api_controle_financeiro.models.Usuario;
 import com.augustodev.api_controle_financeiro.repository.ContaRepository;
 import com.augustodev.api_controle_financeiro.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class ContaService {
 
     public ContaCriadaDTO salvar(ContaPostDTO dados) {
         Usuario buscaUsuario = usuarioRepository.findById(dados.getUsuario_id())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Não foi possível encontrar o usuário com id: " + dados.getUsuario_id()));
 
         Conta conta = new Conta();
         conta.setUsuario(buscaUsuario);
@@ -38,7 +38,7 @@ public class ContaService {
 
     public ContaGetDTO buscar(UUID id) {
         Conta busca = contaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Conta inexistente"));
+                .orElseThrow(() -> new ContaNaoEncontradaException("Não foi possível encontrar a conta com id: " + id));
         ContaGetDTO conta = new ContaGetDTO();
 
         conta.setId(busca.getId());
@@ -66,6 +66,5 @@ public class ContaService {
 
         return contas;
     }
-
 
 }
