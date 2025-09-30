@@ -1,11 +1,13 @@
 package com.augustodev.api_controle_financeiro.controller;
 
+import com.augustodev.api_controle_financeiro.dto.conta.ContaCriadaDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaPostDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaGetDTO;
 import com.augustodev.api_controle_financeiro.models.Conta;
 import com.augustodev.api_controle_financeiro.models.Usuario;
 import com.augustodev.api_controle_financeiro.repository.ContaRepository;
 import com.augustodev.api_controle_financeiro.repository.UsuarioRepository;
+import com.augustodev.api_controle_financeiro.service.ContaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,56 +23,25 @@ import java.util.UUID;
 @RequestMapping("/conta")
 public class ContaController {
 
-    private final ContaRepository contaRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final ContaService contaService;
 
     @PostMapping("/")
-    public ResponseEntity<String> criarConta(@RequestBody ContaPostDTO request) {
-        Optional<Usuario> usuario = usuarioRepository.findById(request.getUsuario_id());
+    public ResponseEntity<ContaCriadaDTO> criarConta(@RequestBody ContaPostDTO request) {
+        ContaCriadaDTO conta = contaService.salvar(request);
 
-        if (usuario.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        Conta conta = new Conta();
-        conta.setUsuario(usuario.get());
-        conta.setSaldo(request.getSaldo());
-        contaRepository.save(conta);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("Conta criada com sucesso.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(conta);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ContaGetDTO> buscarConta(@PathVariable UUID id) {
-        Optional<Conta> conta = contaRepository.findById(id);
-        ContaGetDTO contaGetDTO = new ContaGetDTO();
+        ContaGetDTO conta = contaService.buscar(id);
 
-        if (conta.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } else {
-            contaGetDTO.setId(conta.get().getId());
-            contaGetDTO.setSaldo(conta.get().getSaldo());
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(contaGetDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(conta);
     }
 
     @GetMapping("/")
     public ResponseEntity<List<ContaGetDTO>> buscarTodasContas() {
-        List<Conta> busca = contaRepository.findAll();
-        List<ContaGetDTO> contas = new ArrayList<>();
-
-        if (busca.isEmpty()) {
-            List<ContaGetDTO> vazio = new ArrayList<>();
-            return ResponseEntity.status(HttpStatus.OK).body(vazio);
-        } else {
-            for (Conta conta : busca) {
-                ContaGetDTO contaGetDTO = new ContaGetDTO();
-                contaGetDTO.setId(conta.getId());
-                contaGetDTO.setSaldo(conta.getSaldo());
-                contas.add(contaGetDTO);
-            }
-        }
+        List<ContaGetDTO> contas = contaService.buscarTodos();
 
         return ResponseEntity.status(HttpStatus.OK).body(contas);
     }
