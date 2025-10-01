@@ -4,6 +4,7 @@ import com.augustodev.api_controle_financeiro.dto.usuario.UsuarioGetDTO;
 import com.augustodev.api_controle_financeiro.dto.usuario.UsuarioPostPutDTO;
 import com.augustodev.api_controle_financeiro.dto.usuario.UsuarioRespostaDTO;
 import com.augustodev.api_controle_financeiro.service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,14 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping("/")
-    public ResponseEntity<UsuarioRespostaDTO> criarUsuario(@RequestBody UsuarioPostPutDTO request) {
+    public ResponseEntity<UsuarioRespostaDTO> criarUsuario(@Valid @RequestBody UsuarioPostPutDTO request) {
         UsuarioRespostaDTO usuarioSalvo = usuarioService.salvar(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSalvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioRespostaDTO> atualizarUsuario(@RequestBody UsuarioPostPutDTO request, @PathVariable UUID id) {
+    public ResponseEntity<UsuarioRespostaDTO> atualizarUsuario(@ Valid @RequestBody UsuarioPostPutDTO request, @PathVariable UUID id) {
         UsuarioRespostaDTO usuarioAtualizado = usuarioService.atualizar(request, id);
 
         return ResponseEntity.status(HttpStatus.OK).body(usuarioAtualizado);

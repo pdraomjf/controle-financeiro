@@ -4,6 +4,7 @@ import com.augustodev.api_controle_financeiro.dto.conta.ContaCriadaDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaPostDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaGetDTO;
 import com.augustodev.api_controle_financeiro.service.ContaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class ContaController {
     private final ContaService contaService;
 
     @PostMapping("/")
-    public ResponseEntity<ContaCriadaDTO> criarConta(@RequestBody ContaPostDTO request) {
+    public ResponseEntity<ContaCriadaDTO> criarConta(@Valid @RequestBody ContaPostDTO request) {
         ContaCriadaDTO conta = contaService.salvar(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(conta);
