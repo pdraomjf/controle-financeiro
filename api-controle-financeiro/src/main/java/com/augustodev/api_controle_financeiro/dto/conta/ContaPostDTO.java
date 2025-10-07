@@ -11,8 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContaPostDTO {
-    private UUID usuario_id;
-
     @Digits(integer = 15, fraction = 2, message = "Valor deve ter no máximo 15 dígitos inteiros e 2 casas decimais")
     private BigDecimal saldo;
 }

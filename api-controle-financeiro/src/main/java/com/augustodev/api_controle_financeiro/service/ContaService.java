@@ -1,5 +1,6 @@
 package com.augustodev.api_controle_financeiro.service;
 
+import com.augustodev.api_controle_financeiro.dto.conta.ChecaSaldoDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaCriadaDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaGetDTO;
 import com.augustodev.api_controle_financeiro.dto.conta.ContaPostDTO;
@@ -9,6 +10,7 @@ import com.augustodev.api_controle_financeiro.models.Conta;
 import com.augustodev.api_controle_financeiro.models.Usuario;
 import com.augustodev.api_controle_financeiro.repository.ContaRepository;
 import com.augustodev.api_controle_financeiro.repository.UsuarioRepository;
+import com.augustodev.api_controle_financeiro.security.AuthenticatedUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +24,11 @@ public class ContaService {
 
     private final ContaRepository contaRepository;
     private final UsuarioRepository usuarioRepository;
+    private final AuthenticatedUser authenticatedUser;
 
     public ContaCriadaDTO salvar(ContaPostDTO dados) {
-        Usuario buscaUsuario = usuarioRepository.findById(dados.getUsuario_id())
-                .orElseThrow(() -> new UsuarioNaoEncontradoException("Não foi possível encontrar o usuário com id: " + dados.getUsuario_id()));
+        Usuario buscaUsuario = usuarioRepository.findById(authenticatedUser.getId())
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Não foi possível encontrar o usuário com id: " + authenticatedUser.getId()));
 
         Conta conta = new Conta();
         conta.setUsuario(buscaUsuario);
@@ -43,6 +46,7 @@ public class ContaService {
 
         conta.setId(busca.getId());
         conta.setSaldo(busca.getSaldo());
+        conta.setTitular(busca.getUsuario().getNome());
 
         return conta;
     }
@@ -59,12 +63,22 @@ public class ContaService {
 
                 novo.setId(conta.getId());
                 novo.setSaldo(conta.getSaldo());
+                novo.setTitular(conta.getUsuario().getNome());
 
                 contas.add(novo);
             }
         }
 
         return contas;
+    }
+
+    public ChecaSaldoDTO checaSaldo() {
+        Usuario user = usuarioRepository.findById(authenticatedUser.getId())
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Não foi possível encontrar o usuário."));
+        Conta conta = contaRepository.findById(user.getConta().getId())
+                .orElseThrow(() -> new ContaNaoEncontradaException("Não foi possível encontrar a conta com id"));
+
+        return new ChecaSaldoDTO(conta.getSaldo());
     }
 
 }

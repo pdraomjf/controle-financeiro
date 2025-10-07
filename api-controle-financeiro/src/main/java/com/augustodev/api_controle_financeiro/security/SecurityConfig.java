@@ -22,11 +22,12 @@ public class SecurityConfig {
         http.
                 csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/usuarios/").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/login/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/conta/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/usuarios/").hasRole("ADMIN")
-                        .requestMatchers("/movimentacao/**").hasRole("USUARIO")
+                        .requestMatchers(HttpMethod.GET,"/conta/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers("/movimentacao/**").authenticated()
                         .anyRequest().authenticated()
                 ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

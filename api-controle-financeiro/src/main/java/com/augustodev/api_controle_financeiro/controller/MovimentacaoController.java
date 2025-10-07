@@ -27,9 +27,9 @@ public class MovimentacaoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(movimentacao);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<MovimentacaoGetDTO>> buscarMovimentacoes(@PathVariable UUID id) {
-        List<MovimentacaoGetDTO> movimentacoes = movimentacaoService.buscarTodas(id);
+    @GetMapping("/")
+    public ResponseEntity<List<MovimentacaoGetDTO>> buscarMovimentacoes() {
+        List<MovimentacaoGetDTO> movimentacoes = movimentacaoService.buscarTodas();
 
         return ResponseEntity.status(HttpStatus.OK).body(movimentacoes);
     }

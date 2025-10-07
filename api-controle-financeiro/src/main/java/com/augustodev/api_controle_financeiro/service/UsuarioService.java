@@ -7,6 +7,7 @@ import com.augustodev.api_controle_financeiro.exception.UsuarioNaoEncontradoExce
 import com.augustodev.api_controle_financeiro.models.TipoUsuario;
 import com.augustodev.api_controle_financeiro.models.Usuario;
 import com.augustodev.api_controle_financeiro.repository.UsuarioRepository;
+import com.augustodev.api_controle_financeiro.security.AuthenticatedUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthenticatedUser authenticatedUser;
 
     public UsuarioRespostaDTO salvar(UsuarioPostPutDTO dados) {
         Usuario usuario = new Usuario();
@@ -35,9 +37,9 @@ public class UsuarioService {
         return new UsuarioRespostaDTO(salvo.getNome(), salvo.getEmail());
     }
 
-    public UsuarioRespostaDTO atualizar(UsuarioPostPutDTO dados, UUID id) {
-        Usuario busca = usuarioRepository.findById(id)
-                .orElseThrow(() -> new UsuarioNaoEncontradoException("Não foi possível encontrar o usuário com id: " + id));
+    public UsuarioRespostaDTO atualizar(UsuarioPostPutDTO dados) {
+        Usuario busca = usuarioRepository.findById(authenticatedUser.getId())
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Não foi possível encontrar o usuário com id: " + authenticatedUser.getId()));
 
         busca.setNome(dados.getNome());
         busca.setEmail(dados.getEmail());

@@ -6,14 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContaGetDTO {
-    private UUID id;
+@Getter
+@Setter
+public class ChecaSaldoDTO {
     private BigDecimal saldo;
-    private String titular;
 }
