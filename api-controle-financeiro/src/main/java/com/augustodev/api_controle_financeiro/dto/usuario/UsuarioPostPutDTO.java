@@ -14,6 +14,7 @@ import lombok.Setter;
 public class UsuarioPostPutDTO {
 
     @NotBlank(message = "Nome é obrigatório")
+    @Size(min = 3)
     @Pattern(regexp = "^[A-Za-zÀ-ÿ\\s]+$", message = "O nome deve conter apenas letras")
     private String nome;
 
