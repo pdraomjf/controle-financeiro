@@ -7,13 +7,19 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
-public class MovimentacaoPostDTO {
+@NoArgsConstructor
+public class MovimentacaoPutDTO {
+    @NotNull(message = "O ID da movimentação deve ser fornecido.")
+    private UUID id;
+
     @NotBlank
     private String nome;
 

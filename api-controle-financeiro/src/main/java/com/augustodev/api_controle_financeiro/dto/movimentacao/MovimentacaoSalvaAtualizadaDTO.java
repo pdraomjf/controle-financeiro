@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MovimentacaoSalvaDTO {
+public class MovimentacaoSalvaAtualizadaDTO {
     private String nome;
     private String categoria;
     private BigDecimal valor;
