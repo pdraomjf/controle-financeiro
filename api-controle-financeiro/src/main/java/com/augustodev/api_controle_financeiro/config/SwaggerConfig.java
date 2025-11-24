@@ -5,6 +5,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,18 +13,23 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI costumOpenAPI() {
+    public OpenAPI openAPI() {
+
+        Server server = new Server();
+        server.setUrl("https://marvellous-luce-augustodev-f348a5bf.koyeb.app");
+        server.setDescription("Servidor da API de Controle Financeiro");
+
         return new OpenAPI()
                 .info(new Info()
                         .title("API Controle Financeiro")
-                        .version("0.0.1")
-                        .description("Documentação da API"))
+                )
+                .addServersItem(server)
                 .components(new Components()
-                    .addSecuritySchemes("bearer-key",
-                            new SecurityScheme()
-                                    .type(SecurityScheme.Type.HTTP)
-                                    .scheme("bearer")
-                                    .bearerFormat("JWT")))
+                        .addSecuritySchemes("bearer-key",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")))
                 .addSecurityItem(new SecurityRequirement().addList("bearer-key"));
     }
 
