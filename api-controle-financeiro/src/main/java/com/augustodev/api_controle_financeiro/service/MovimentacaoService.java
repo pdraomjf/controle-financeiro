@@ -53,7 +53,7 @@ public class MovimentacaoService {
             BigDecimal valorRetirado = dados.getValor();
 
             BigDecimal valorAtualizado = saldoAtual.subtract(valorRetirado);
-
+    
             conta.setSaldo(valorAtualizado);
         }
 
@@ -116,7 +116,7 @@ public class MovimentacaoService {
 
         movimentacao.setConta(conta);
         movimentacao.setValor(dados.getValor());
-        movimentacao.setTipo(movimentacao.getTipo());
+        movimentacao.setTipo(dados.getTipo());
         movimentacao.setNome(dados.getNome());
         movimentacao.setCategoria(dados.getCategoria());
 
